@@ -112,7 +112,7 @@ namespace AHOS.Api.Controllers
             }
             catch (DbUpdateException)
             {
-                throw
+                throw;
             }
 
             return CreatedAtAction("GetCitizenApplication", new { id = data.Id }, citizenApplication);
