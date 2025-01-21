@@ -12,7 +12,7 @@ public partial class CitizenPatient : BaseEntity
 
     public long IdentityNumber { get; set; }
 
-    public BitArray Active { get; set; } = null!;
+    public bool Active { get; set; } 
 
     public string FirstName { get; set; } = null!;
 
@@ -24,11 +24,8 @@ public partial class CitizenPatient : BaseEntity
 
     public string BirthPlace { get; set; } = null!;
 
-    public BitArray Deceased { get; set; } = null!;
+    public bool Deceased { get; set; }
 
-    public string MotherName { get; set; } = null!;
-
-    public string FatherName { get; set; } = null!;
 
     public string PhoneNumber { get; set; } = null!;
 

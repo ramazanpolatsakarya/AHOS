@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AHOS.Api.Models;
 using AHOS.Api.Models.Patient;
 using AHOS.Api.Dto;
+using AutoMapper;
 
 namespace AHOS.Api.Controllers
 {
@@ -16,10 +17,12 @@ namespace AHOS.Api.Controllers
     public class CitizenApplicationsController : ControllerBase
     {
         private readonly AhosContext _context;
+        private readonly IMapper _mapper;
 
-        public CitizenApplicationsController(AhosContext context)
+        public CitizenApplicationsController(AhosContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/CitizenApplications
@@ -77,26 +80,40 @@ namespace AHOS.Api.Controllers
         // POST: api/CitizenApplications
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CitizenApplication>> PostCitizenApplication(CreateCitizenGetatApplicationDto citizenApplication)
+        public async Task<ActionResult<CitizenApplication>> PostCitizenApplication(CreateCitizenApplicationDto citizenApplication)
         {
-            _context.CitizenApplications.Add(citizenApplication);
+            var patient = _mapper.Map<CitizenPatient>(citizenApplication.Patient);
+            await _context.CitizenPatients.AddAsync(patient);
+            await _context.SaveChangesAsync();
+
+            var data = new CitizenApplication();
+            data.PatientId = patient.Id;
+            //data.CitizenApplicationServices = _mapper.Map<List<CitizenApplicationService>>(citizenApplication.Services);
+
+            foreach (var service in citizenApplication.Services) {
+
+                data.CitizenApplicationServices.Add(new CitizenApplicationService()
+                {
+                    CityId = service.CityId,
+                    FamilyDoctorId = service.FamilyDoctorId,
+                    ServiceId = service.ServiceId,
+                    ServiceReferanceCode = "", //TODO bu kısım bankaya gidecek olan
+                    Price = 0, //TODO bu kısım servise göre son ödenecek ücret
+
+                });
+
+             }
+            _context.CitizenApplications.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (CitizenApplicationExists(citizenApplication.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw
             }
 
-            return CreatedAtAction("GetCitizenApplication", new { id = citizenApplication.Id }, citizenApplication);
+            return CreatedAtAction("GetCitizenApplication", new { id = data.Id }, citizenApplication);
         }
 
         // DELETE: api/CitizenApplications/5

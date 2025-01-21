@@ -14,12 +14,16 @@ public partial class CitizenApplicationService : BaseEntity
     public Guid ServiceId { get; set; }
 
 
-    // buradaki amaç her servis için farklı bir aile hekimi seçebilir.
+    // her servis için farklı bir aile hekimi seçebilir.
     public Guid FamilyDoctorId { get; set; }
-
+    // ücret olarak hizmetin son durumuna göre çekilecek
     public double Price { get; set; }
 
+    // aile hekimi üzerinden şehri tekrar sorgulamayalım.. burdan filtreleyelim. ilerde de kullanılacaktır.
     public Guid? CityId { get; set; }
+
+
+    // Bankaya göndereceğimiz referans kodu
 
     public string ServiceReferanceCode { get; set; } = null!;
 

@@ -1,13 +1,22 @@
-﻿using AHOS.Api.Enums;
+﻿using System.Collections;
+using AHOS.Api.Enums;
+using AHOS.Api.Models.Base;
+using AHOS.Api.Models.Common;
 using AHOS.Api.Models.Patient;
 
 namespace AHOS.Api.Dto
 {
     //Getat yada Rapor üzerinden almış olması önemli değil hepsini tek bir yapıda kullanabiliriz
-    public class CreateCitizenReportApplicationDto
+    public class CreateCitizenApplicationDto
     {
-        public Guid PatientId { get; set; }
 
+        //public Guid PatientId { get; set; }
+        public CreateCitizenApplicationDto()
+        {
+            this.ApplicationStatus = ApplicationStatus.Pedding;
+        }
+
+        public CreateCitizenPatientDto Patient { get; set; }
 
         public ApplicationStatus ApplicationStatus { get; set; }
 
@@ -22,19 +31,37 @@ namespace AHOS.Api.Dto
         public Guid ServiceId { get; set; }
 
 
-        // her servis için farklı bir aile hekimi seçebilir.
         public Guid FamilyDoctorId { get; set; }
 
-        public double Price { get; set; }
 
-        // aile hekimi üzerinden şehri tekrar sorgulamayalım.. burdan filtreleyelim. ilerde de kullanılacaktır.
         public Guid? CityId { get; set; }
 
-        // Bankaya göndereceğimiz referans kodu
-        public string ServiceReferanceCode { get; set; } = null!;
+        //public double Price { get; set; }
+        //public string ServiceReferanceCode { get; set; } = null!;
 
     }
 
+    public partial class CreateCitizenPatientDto
+    {
+        public long IdentityNumber { get; set; }
+
+        public bool Active { get; set; }
+
+        public string FirstName { get; set; } = null!;
+
+        public string LastName { get; set; } = null!;
+
+        public Guid GenderId { get; set; }
+
+        public DateOnly BirthDate { get; set; }
+
+        public string BirthPlace { get; set; } = null!;
+
+
+        public string PhoneNumber { get; set; } = null!;
+
+        public virtual Gender Gender { get; set; } = null!;
+    }
 
 
 }
