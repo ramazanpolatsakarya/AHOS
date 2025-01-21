@@ -83,6 +83,8 @@ namespace AHOS.Api.Controllers
         public async Task<ActionResult<CitizenApplication>> PostCitizenApplication(CreateCitizenApplicationDto citizenApplication)
         {
             var patient = _mapper.Map<CitizenPatient>(citizenApplication.Patient);
+
+
             await _context.CitizenPatients.AddAsync(patient);
             await _context.SaveChangesAsync();
 
