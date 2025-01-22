@@ -8,9 +8,9 @@ namespace AHOS.Api.Models.Patient;
 
 public partial class NonCitizenPatient : BaseEntity
 {
-    public Guid Id { get; set; }
+    public string Nationality { get; set; } //Uyruk
 
-    public BitArray Active { get; set; } = null!;
+    public bool Active { get; set; } = false;
 
     public string FirstName { get; set; } = null!;
 
@@ -20,11 +20,11 @@ public partial class NonCitizenPatient : BaseEntity
 
     public DateOnly BirthDate { get; set; }
 
-    public BitArray Deceased { get; set; } = null!;
+    public bool Deceased { get; set; } = false;
 
     public string PassportNumber { get; set; } = null!;
 
-    public BitArray? PassportNumberVerified { get; set; }
+    public bool? PassportNumberVerified { get; set; }
 
     public Guid NoncitizenPatientTypeId { get; set; }
 

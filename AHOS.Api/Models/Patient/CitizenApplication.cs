@@ -7,7 +7,6 @@ namespace AHOS.Api.Models.Patient;
 
 public partial class CitizenApplication : BaseEntity
 {
-    public Guid Id { get; set; }
 
     public Guid PatientId { get; set; }
 

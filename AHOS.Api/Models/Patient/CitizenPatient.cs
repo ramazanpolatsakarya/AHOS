@@ -8,8 +8,6 @@ namespace AHOS.Api.Models.Patient;
 
 public partial class CitizenPatient : BaseEntity
 {
-    public Guid Id { get; set; }
-
     public long IdentityNumber { get; set; }
 
     public bool Active { get; set; } 

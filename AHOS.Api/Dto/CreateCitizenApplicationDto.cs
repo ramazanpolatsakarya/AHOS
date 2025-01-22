@@ -15,8 +15,8 @@ namespace AHOS.Api.Dto
         {
             this.ApplicationStatus = ApplicationStatus.Pedding;
         }
-
-        public CreateCitizenPatientDto Patient { get; set; }
+        //hasta bilgisini otomatik alacağız
+        //public CreateCitizenPatientDto Patient { get; set; }
 
         public ApplicationStatus ApplicationStatus { get; set; }
 

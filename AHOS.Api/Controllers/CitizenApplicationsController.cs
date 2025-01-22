@@ -9,10 +9,11 @@ using AHOS.Api.Models;
 using AHOS.Api.Models.Patient;
 using AHOS.Api.Dto;
 using AutoMapper;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AHOS.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class CitizenApplicationsController : ControllerBase
     {
@@ -25,14 +26,14 @@ namespace AHOS.Api.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/CitizenApplications
+        // GET: api/CitizenApplications/GetCitizenApplications
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CitizenApplication>>> GetCitizenApplications()
         {
             return await _context.CitizenApplications.ToListAsync();
         }
 
-        // GET: api/CitizenApplications/5
+        // GET: api/CitizenApplications/GetCitizenApplication/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CitizenApplication>> GetCitizenApplication(Guid id)
         {
@@ -46,7 +47,7 @@ namespace AHOS.Api.Controllers
             return citizenApplication;
         }
 
-        // PUT: api/CitizenApplications/5
+        // PUT: api/CitizenApplications/PutCitizenApplication/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCitizenApplication(Guid id, CitizenApplication citizenApplication)
@@ -77,22 +78,24 @@ namespace AHOS.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/CitizenApplications
+        // POST: api/CitizenApplications/PostCitizenApplication
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<CitizenApplication>> PostCitizenApplication(CreateCitizenApplicationDto citizenApplication)
         {
-            var patient = _mapper.Map<CitizenPatient>(citizenApplication.Patient);
+            //vasi seçilmiş ise de otomatik getirebiliriz. 
+            CitizenPatient patient = await GetCitizenPatient(); // otomatik sistemden çekecek
 
 
-            await _context.CitizenPatients.AddAsync(patient);
-            await _context.SaveChangesAsync();
 
-            var data = new CitizenApplication();
-            data.PatientId = patient.Id;
+            var data = new CitizenApplication
+            {
+                PatientId = patient.Id
+            };
             //data.CitizenApplicationServices = _mapper.Map<List<CitizenApplicationService>>(citizenApplication.Services);
 
-            foreach (var service in citizenApplication.Services) {
+            foreach (var service in citizenApplication.Services)
+            {
 
                 data.CitizenApplicationServices.Add(new CitizenApplicationService()
                 {
@@ -104,7 +107,7 @@ namespace AHOS.Api.Controllers
 
                 });
 
-             }
+            }
             _context.CitizenApplications.Add(data);
             try
             {
@@ -116,6 +119,18 @@ namespace AHOS.Api.Controllers
             }
 
             return CreatedAtAction("GetCitizenApplication", new { id = data.Id }, citizenApplication);
+        }
+
+        private async Task<CitizenPatient> GetCitizenPatient()
+        {
+            var patient =  new Models.Patient.CitizenPatient();
+            //eğer sistemde yoksa kaydedelim.
+            if (false)
+            {
+                await _context.CitizenPatients.AddAsync(patient);
+                await _context.SaveChangesAsync();
+            }
+            return patient;
         }
 
         // DELETE: api/CitizenApplications/5
