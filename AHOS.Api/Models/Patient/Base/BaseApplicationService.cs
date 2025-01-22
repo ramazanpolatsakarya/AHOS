@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using AHOS.Api.Models.Base;
+﻿using AHOS.Api.Models.Base;
 using AHOS.Api.Models.Common;
 
-namespace AHOS.Api.Models.Patient;
+namespace AHOS.Api.Models.Patient.Base;
 
-public partial class CitizenApplicationService : BaseEntity
+public partial class BaseApplicationService : BaseEntity
 {
 
-    public Guid CitizenApplicationId { get; set; }
 
     public Guid ServiceId { get; set; }
 
@@ -26,7 +23,6 @@ public partial class CitizenApplicationService : BaseEntity
 
     public string ServiceReferanceCode { get; set; } = null!;
 
-    public virtual CitizenApplication CitizenApplication { get; set; } = null!;
 
     public virtual Service Service { get; set; } = null!;
     public virtual FamilyDoctor FamilyDoctor { get; set; } = null!;

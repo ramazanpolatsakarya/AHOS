@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using AHOS.Api.Models.Patient;
+using AHOS.Api.Models.Patient.NonCitizen;
 
 namespace AHOS.Api.Models.Common;
 
-public partial class NoncitizenPatientType
+public partial class NonCitizenPatientType
 {
     public Guid Id { get; set; }
 

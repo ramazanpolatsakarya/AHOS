@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using AHOS.Api.Models.Base;
 using AHOS.Api.Models.Common;
 
-namespace AHOS.Api.Models.Patient;
+namespace AHOS.Api.Models.Patient.Base;
 
-public partial class CitizenPatient : BaseEntity
+public partial class BasePatient : BaseEntity
 {
-    public long IdentityNumber { get; set; }
 
-    public bool Active { get; set; } 
+    public BitArray Active { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -22,7 +19,7 @@ public partial class CitizenPatient : BaseEntity
 
     public string BirthPlace { get; set; } = null!;
 
-    public bool Deceased { get; set; }
+    public BitArray Deceased { get; set; }
 
 
     public string PhoneNumber { get; set; } = null!;

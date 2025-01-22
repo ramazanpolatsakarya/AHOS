@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AHOS.Api.Models.Patient;
+using AHOS.Api.Models.Patient.Citizen;
 
 namespace AHOS.Api.Models.Common;
 
@@ -14,5 +14,4 @@ public partial class Service
 
     public double? Price { get; set; }
 
-    public virtual ICollection<CitizenApplicationService> CitizenApplicationServices { get; set; } = new List<CitizenApplicationService>();
 }

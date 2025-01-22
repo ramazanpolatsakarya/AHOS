@@ -8,52 +8,50 @@ using Microsoft.EntityFrameworkCore;
 using AHOS.Api.Models;
 using AutoMapper;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using AHOS.Api.Models.Patient.Citizen;
-using AHOS.Api.Dto.CitizenApplication.Citizen;
-using AHOS.Api.Dto.CitizenApplication.NonCitizen;
-using AHOS.Api.Models.Patient;
 using AHOS.Api.Models.Patient.NonCitizen;
+using AHOS.Api.Models.Patient;
+using AHOS.Api.Dto.CitizenApplication.NonCitizen;
 
 namespace AHOS.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CitizenApplicationsController : ControllerBase
+    public class NonCitizenApplicationsController : ControllerBase
     {
         private readonly AhosContext _context;
         private readonly IMapper _mapper;
 
-        public CitizenApplicationsController(AhosContext context, IMapper mapper)
+        public NonCitizenApplicationsController(AhosContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/CitizenApplications/GetCitizenApplications
+        // GET: api/NonCitizenApplications/GetNonCitizenApplications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CitizenApplication>>> GetCitizenApplications()
+        public async Task<ActionResult<IEnumerable<NonCitizenApplication>>> GetNonCitizenApplications()
         {
-            return await _context.CitizenApplications.ToListAsync();
+            return await _context.NonCitizenApplications.ToListAsync();
         }
 
-        // GET: api/CitizenApplications/GetCitizenApplication/5
+        // GET: api/NonCitizenApplications/GetNonCitizenApplication/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CitizenApplication>> GetCitizenApplication(Guid id)
+        public async Task<ActionResult<NonCitizenApplication>> GetNonCitizenApplication(Guid id)
         {
-            var citizenApplication = await _context.CitizenApplications.FindAsync(id);
+            var NonCitizenApplication = await _context.NonCitizenApplications.FindAsync(id);
 
-            if (citizenApplication == null)
+            if (NonCitizenApplication == null)
             {
                 return NotFound();
             }
 
-            return citizenApplication;
+            return NonCitizenApplication;
         }
 
-        // PUT: api/CitizenApplications/PutCitizenApplication/5
+        // PUT: api/NonCitizenApplications/PutNonCitizenApplication/5
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCitizenApplication(Guid id, CitizenApplication dto)
+        public async Task<IActionResult> PutNonCitizenApplication(Guid id, NonCitizenApplication dto)
         {
             if (id != dto.Id)
             {
@@ -68,7 +66,7 @@ namespace AHOS.Api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CitizenApplicationExists(id))
+                if (!NonCitizenApplicationExists(id))
                 {
                     return NotFound();
                 }
@@ -81,25 +79,25 @@ namespace AHOS.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/CitizenApplications/PostCitizenApplication
+        // POST: api/NonCitizenApplications/PostNonCitizenApplication
         [HttpPost]
-        public async Task<ActionResult<CitizenApplication>> PostCitizenApplication(CreateCitizenApplicationDto dto)
+        public async Task<ActionResult<NonCitizenApplication>> PostNonCitizenApplication(CreateNonCitizenApplicationDto dto)
         {
             //vasi seçilmiş ise de otomatik getirebiliriz. 
-            var patient = await GetCitizenPatient(); // otomatik sistemden çekecek
+            var patient = await GetNonCitizenPatient(); // otomatik sistemden çekecek
 
 
 
-            var data = new CitizenApplication
+            var data = new NonCitizenApplication
             {
                 PatientId = patient.Id
             };
-            //data.CitizenApplicationServices = _mapper.Map<List<CitizenApplicationService>>(citizenApplication.Services);
+            //data.NonCitizenApplicationServices = _mapper.Map<List<NonCitizenApplicationService>>(NonCitizenApplication.Services);
 
             foreach (var service in dto.Services)
             {
 
-                data.CitizenApplicationServices.Add(new CitizenApplicationService()
+                data.NonCitizenApplicationServices.Add(new NonCitizenApplicationService()
                 {
                     CityId = service.CityId,
                     FamilyDoctorId = service.FamilyDoctorId,
@@ -110,7 +108,7 @@ namespace AHOS.Api.Controllers
                 });
 
             }
-            _context.CitizenApplications.Add(data);
+            _context.NonCitizenApplications.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
@@ -120,41 +118,43 @@ namespace AHOS.Api.Controllers
                 throw;
             }
 
-            return CreatedAtAction("GetCitizenApplication", new { id = data.Id }, dto);
+            return CreatedAtAction("GetNonCitizenApplication", new { id = data.Id }, dto);
         }
-      
-        private async Task<CitizenPatient> GetCitizenPatient()
+
+        private async Task<NonCitizenPatient> GetNonCitizenPatient()
         {
-            var patient =  new Models.Patient.Citizen.CitizenPatient();
+            var patient =  new Models.Patient.NonCitizen.NonCitizenPatient();
             //eğer sistemde yoksa kaydedelim.
             if (false)
             {
-                await _context.CitizenPatients.AddAsync(patient);
+                await _context.NonCitizenPatients.AddAsync(patient);
                 await _context.SaveChangesAsync();
             }
             return patient;
         }
 
-      
-        // DELETE: api/CitizenApplications/5
+    
+
+
+        // DELETE: api/NonCitizenApplications/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCitizenApplication(Guid id)
+        public async Task<IActionResult> DeleteNonCitizenApplication(Guid id)
         {
-            var citizenApplication = await _context.CitizenApplications.FindAsync(id);
-            if (citizenApplication == null)
+            var NonCitizenApplication = await _context.NonCitizenApplications.FindAsync(id);
+            if (NonCitizenApplication == null)
             {
                 return NotFound();
             }
 
-            _context.CitizenApplications.Remove(citizenApplication);
+            _context.NonCitizenApplications.Remove(NonCitizenApplication);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CitizenApplicationExists(Guid id)
+        private bool NonCitizenApplicationExists(Guid id)
         {
-            return _context.CitizenApplications.Any(e => e.Id == id);
+            return _context.NonCitizenApplications.Any(e => e.Id == id);
         }
     }
 }
